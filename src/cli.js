@@ -12,7 +12,6 @@ program
   .usage('[options] <NAME>')
   .option('-p, --profile [profile]', 'Select AWS credential profile to use [default].', 'default')
 
-program
 
 program
   .command('rm')
@@ -32,6 +31,8 @@ program
 
     gateway.destroyAPI(apiId).then(res => localConfig.remove('api.id'));
   });
+
+program
   .command('config [action] [args...]')
   .description('Manage config settings')
   .action(function(action, args, options) {
