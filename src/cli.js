@@ -10,19 +10,17 @@ program
   .version('0.0.1')
   .alias('gater')
   .usage('[options] <NAME>')
-  .option('-p, --profile [profile]', 'Select AWS credential profile to use.')
+  .option('-p, --profile [profile]', 'Select AWS credential profile to use [default].', 'default')
 
 program
 
 program
   .command('rm')
   .description('Destroy an API')
-  .option('--id [ID]', "API ID")
+  .option('--id [id]', "API ID")
   .action(function(options) {
-    const {
-      profile,
-      id,
-    } = options;
+    const { id } = options;
+    const { profile } = options.parent;
 
     const gateway = apiGateway(profile);
     const apiId = (id || localConfig.get('api.id'));
@@ -32,8 +30,7 @@ program
       process.exit(1);
     }
 
-    gateway.destroyAPI(apiId);
-    localConfig.remove('api.id');
+    gateway.destroyAPI(apiId).then(res => localConfig.remove('api.id'));
   });
   .command('config [action] [args...]')
   .description('Manage config settings')
