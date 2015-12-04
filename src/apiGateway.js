@@ -14,4 +14,5 @@ export default function apiGateway(profile) {
           else { handleError(err); }
         });
     },
-    },
+  };
+}
