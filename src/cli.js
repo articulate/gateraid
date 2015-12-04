@@ -1,6 +1,7 @@
 import program from 'commander'
 import path from 'path'
 
+import apiGateway from './apiGateway.js'
 import config from './config.js'
 
 const localConfig = config();
@@ -11,6 +12,28 @@ program
   .option('-p, --profile [profile]', 'Select AWS credential profile to use.')
 
 program
+
+program
+  .command('rm')
+  .description('Destroy an API')
+  .option('--id [ID]', "API ID")
+  .action(function(options) {
+    const {
+      profile,
+      id,
+    } = options;
+
+    const gateway = apiGateway(profile);
+    const apiId = (id || localConfig.get('api.id'));
+
+    if(!apiId) {
+      console.error('API ID not given. Has it deployed yet?');
+      process.exit(1);
+    }
+
+    gateway.destroyAPI(apiId);
+    localConfig.remove('api.id');
+  });
   .command('config [action] [args...]')
   .description('Manage config settings')
   .action(function(action, args, options) {
