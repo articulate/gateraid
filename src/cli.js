@@ -8,7 +8,8 @@ const localConfig = config();
 
 program
   .version('0.0.1')
-  .usage('gater [options] NAME')
+  .alias('gater')
+  .usage('[options] <NAME>')
   .option('-p, --profile [profile]', 'Select AWS credential profile to use.')
 
 program

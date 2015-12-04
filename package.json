@@ -1,5 +1,5 @@
 {
-  "name": "gater",
+  "name": "gateraid",
   "version": "0.0.1",
   "description": "RAML to API Gateway tool",
   "main": "index.js",
@@ -30,7 +30,10 @@
     "gateway",
     "aws"
   ],
-  "bin": { "gater": "./bin/gater" },
+  "bin": {
+    "gater": "./bin/gater",
+    "gateraid": "./bin/gateraid"
+  },
   "author": "Luke van der Hoeven",
   "license": "MIT"
 }
