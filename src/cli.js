@@ -1,10 +1,24 @@
 import program from 'commander'
 import path from 'path'
 
-import apiGateway from './apiGateway.js'
-import config from './config.js'
+import apiGateway from './apiGateway'
 
-const localConfig = config();
+import loadConfig from './loadConfig'
+import prepareAws from './prepareAws'
+import generateRamlParser from './generateRamlParser'
+import generateConfigHandler from './generateConfigHandler'
+
+import createApi from './aws/createApi'
+import createBasePath from './aws/createBasePath'
+import createModels from './aws/createModels'
+import addRootResource from './aws/addRootResource'
+import createResources from './aws/createResources'
+import destroyApi from './aws/destroyApi'
+
+function handleError(err) {
+  console.error(err.stack);
+  process.exit(1);
+}
 
 program
   .version('0.0.1')
@@ -12,51 +26,52 @@ program
   .usage('[options] <NAME>')
   .option('-p, --profile [profile]', 'Select AWS credential profile to use [default].', 'default')
 
+program
+  .command('create <filename>')
+  .description('Create new API Gateway from a RAML file definition.')
+  .option('-n, --name [name]', 'Name for the API (defaults to project directory name).', path.basename(process.cwd()))
+  .option('-c, --config [path]', 'AWS-specific config JSON file.')
+  .action(function(filename, options) {
+    loadConfig(options)
+      .then(prepareAws)
+      .then(generateRamlParser(filename))
+      .then(createApi)
+      // .then(createBasePath)
+      .then(createModels)
+      .then(addRootResource)
+      .then(createResources)
+      .then(data => {
+        const { apiId, config } = data;
+
+        config.set('api.id', apiId);
+        console.log(`Created API Gateway ${apiId}`);
+      }).catch(handleError);
+  });
 
 program
   .command('rm')
   .description('Destroy an API')
   .option('--id [id]', "API ID")
   .action(function(options) {
-    const { id } = options;
-    const { profile } = options.parent;
+    loadConfig(options)
+      .then(prepareAws)
+      .then(destroyApi)
+      .then(data => {
+        const { apiId, config } = data;
 
-    const gateway = apiGateway(profile);
-    const apiId = (id || localConfig.get('api.id'));
-
-    if(!apiId) {
-      console.error('API ID not given. Has it deployed yet?');
-      process.exit(1);
-    }
-
-    gateway.destroyAPI(apiId).then(res => localConfig.remove('api.id'));
+        config.remove('api.id');
+        console.log(`Destroyed API Gateway ${apiId}`);
+      })
+      .catch(handleError);
   });
 
 program
   .command('config [action] [args...]')
   .description('Manage config settings')
   .action(function(action, args, options) {
-    if(action == 'set') {
-      args.forEach(setting => {
-        let [key, val] = setting.split('=');
-        localConfig.set(key, val);
-      });
-    } else if (action == 'get') {
-      if(args.length == 1) {
-        console.log(localConfig.get(args[0]));
-      } else {
-        args.forEach(key => {
-          const value = localConfig.get(key);
-          console.log(`${key}=${value}`);
-        });
-      }
-    } else if(action == 'rm') {
-      args.forEach(key => {
-        localConfig.remove(key);
-      });
-    } else {
-      localConfig.print();
-    }
+    loadConfig(options)
+      .then(generateConfigHandler(action, args))
+      .catch(handleError);
   });
 
 program.parse(process.argv);

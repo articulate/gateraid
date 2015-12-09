@@ -18,7 +18,7 @@ function _finalize(data, configFile=defaultFile) {
   return data;
 }
 
-export default function(path=defaultFile) {
+export default function config(path=defaultFile) {
   let config = _read(path);
 
   return {
