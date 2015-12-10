@@ -1,17 +1,17 @@
 import program from 'commander'
 import path from 'path'
 
-import apiGateway from './apiGateway'
-
 import loadConfig from './loadConfig'
 import prepareAws from './prepareAws'
-import generateRamlParser from './generateRamlParser'
+import parseRaml from './parseRaml'
 import generateConfigHandler from './generateConfigHandler'
 
 import createApi from './aws/createApi'
+import removeDefaultModels from './aws/removeDefaultModels'
 import createBasePath from './aws/createBasePath'
 import createModels from './aws/createModels'
 import addRootResource from './aws/addRootResource'
+import createResourcePath from './createResourcePath'
 import createResources from './aws/createResources'
 import destroyApi from './aws/destroyApi'
 
@@ -34,11 +34,12 @@ program
   .action(function(filename, options) {
     loadConfig(options)
       .then(prepareAws)
-      .then(generateRamlParser(filename))
+      .then(parseRaml(filename))
       .then(createApi)
-      // .then(createBasePath)
+      .then(removeDefaultModels)
       .then(createModels)
       .then(addRootResource)
+      .then(createResourcePath)
       .then(createResources)
       .then(data => {
         const { apiId, config } = data;
