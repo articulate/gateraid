@@ -1,0 +1,3 @@
+[submodule "example"]
+	path = example
+	url = https://github.com/articulate/auth0-api-gateway.git

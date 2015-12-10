@@ -4,8 +4,4 @@
 # Test files
 
 .gater.json
-api.raml
-config.json
 out.json
-/examples/
-/schemas/
