@@ -15,7 +15,8 @@
     "babel-preset-es2015": "^6.1.18"
   },
   "scripts": {
-    "build": "babel --out-dir build src"
+    "build": "babel --out-dir build src",
+    "clean": "rm -r ./build/*"
   },
   "babel": {
     "presets": [
