@@ -4,9 +4,10 @@ export default function removeDefaultModels(data) {
   const { gateway, apiId } = data;
 
   function deleteModel(model) {
+    const args = { restApiId: apiId, modelName: model.name };
+
     console.log(`Deleting default models ${model.name}`);
-    
-    promisify(gateway.deleteModel, gateway)({ restApiId: apiId, modelName: model.name });
+    promisify(gateway.deleteModel, gateway)(args);
   }
 
   return new Promise((resolve, reject) => {
@@ -16,6 +17,6 @@ export default function removeDefaultModels(data) {
     });
   })
     .then(models => models.map(deleteModel))  // delete all models
-    .then(promises => Promise.all(promises))  // syncronize
+    .then(promises => Promise.all(promises))  // synchronize
     .then(promise => data); // restore data chain
 }

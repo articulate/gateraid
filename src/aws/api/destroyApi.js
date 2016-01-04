@@ -8,6 +8,7 @@ export default function destroyApi(data) {
     gateway.deleteRestApi({ restApiId: apiId }, (err, resp) => {
       if(err) { reject(err); }
       else {
+        console.log(`Destroyed API Gateway ${apiId}`);
         resolve(Object.assign({}, data, { apiId }));
       }
     });

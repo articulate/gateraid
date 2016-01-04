@@ -6,7 +6,7 @@ export default function createApi(data) {
       if(err) { reject(err); }
       else {
         const { id } = resp;
-        console.log(`ID: ${id}`);
+        console.log(`Created API with ID: ${id}`);
 
         resolve(Object.assign({}, data, { apiId: id }));
       }

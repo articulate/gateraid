@@ -1,29 +1,15 @@
-import promisify from '../utils/promisify'
-
-const defaultContentType = 'application/json';
-
-function createModel(schemaDef, apiId, gateway) {
-  const name = Object.keys(schemaDef)[0],
-        schema = schemaDef[name];
-
-  console.log(`Creating model: ${name}`);
-
-  const args = {
-    name,
-    schema,
-    restApiId: apiId,
-    description: schema.title,
-    contentType: defaultContentType,
-  };
-
-  return promisify(gateway.createModel, gateway)(args);
-}
+import createModel from './model/createModel'
 
 export default function createModels(data) {
-  const { gateway, apiId, definition: { schemas }} = data;
+  const { definition: { schemas }} = data;
 
-  const promises = schemas.map(schema => createModel(schema, apiId, gateway));
+  const promises = schemas.map(schemaDef => {
+    const name = Object.keys(schemaDef)[0],
+          schema = schemaDef[name];
 
-  return Promise.all(promises)
-    .then(resp => data);
+    return createModel(name, schema)(data);
+  });
+
+  return Promise.all(promises)  // synchronize
+    .then(() => data);  // restore data chain
 }

@@ -6,14 +6,11 @@ import prepareAws from './prepareAws'
 import parseRaml from './parseRaml'
 import generateConfigHandler from './generateConfigHandler'
 
-import createApi from './aws/createApi'
+import createApi from './aws/api/createApi'
 import removeDefaultModels from './aws/removeDefaultModels'
-import createBasePath from './aws/createBasePath'
 import createModels from './aws/createModels'
-import addRootResource from './aws/addRootResource'
-import createResourcePath from './createResourcePath'
-import createResources from './aws/createResources'
-import destroyApi from './aws/destroyApi'
+import buildResources from './aws/buildResources'
+import destroyApi from './aws/api/destroyApi'
 
 function handleError(err) {
   console.error(err.stack);
@@ -30,7 +27,8 @@ program
   .command('create <filename>')
   .description('Create new API Gateway from a RAML file definition.')
   .option('-n, --name [name]', 'Name for the API (defaults to project directory name).', path.basename(process.cwd()))
-  .option('-c, --config [path]', 'AWS-specific config JSON file.')
+  .option('-c, --config <path>', 'AWS-specific config YAML config file.')
+  .option('-t, --test', 'Test operations. Remove after creating.', false)
   .action(function(filename, options) {
     loadConfig(options)
       .then(prepareAws)
@@ -38,15 +36,24 @@ program
       .then(createApi)
       .then(removeDefaultModels)
       .then(createModels)
-      .then(addRootResource)
-      .then(createResourcePath)
-      .then(createResources)
+      .then(buildResources)
       .then(data => {
         const { apiId, config } = data;
 
         config.set('api.id', apiId);
         console.log(`Created API Gateway ${apiId}`);
-      }).catch(handleError);
+        return data;
+      })
+      .then(data => {
+        const { options: { test } } = data;
+        if(test) { destroyApi(data); }
+
+        return data;
+      })
+      .catch(err => {
+        // destroyApi(data);
+        handleError(err);
+      });
   });
 
 program
@@ -61,7 +68,6 @@ program
         const { apiId, config } = data;
 
         config.remove('api.id');
-        console.log(`Destroyed API Gateway ${apiId}`);
       })
       .catch(handleError);
   });
