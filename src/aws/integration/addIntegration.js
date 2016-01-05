@@ -1,17 +1,17 @@
 import promisify from '../../utils/promisify'
 import integrationType from './integrationType'
 
-export default function addIntegration(method, config) {
+export default function addIntegration(httpMethod, config) {
   const {
     type,
     requests,
-    params: requestParameters,
+    params: requestParameters = {},
   } = config;
 
   return function(data) {
     if(!type) { return new Promise(resolve => resolve(data)); }
 
-    console.log(`Creating integration request for ${method} of type ${type}`);
+    console.log(`Creating integration request for ${httpMethod} of type ${type}`);
 
     const {
       apiId,
@@ -25,7 +25,7 @@ export default function addIntegration(method, config) {
           type,
           credentials,
           uri,
-          httpMethod = method,
+          integrationHttpMethod = httpMethod,
         } = config;
 
         const args = {
@@ -36,7 +36,7 @@ export default function addIntegration(method, config) {
           type,
           uri,
           requestParameters,
-          integrationHttpMethod: httpMethod,
+          integrationHttpMethod,
           requestTemplates: {},
         };
 

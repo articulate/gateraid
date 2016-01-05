@@ -42,13 +42,14 @@ function lambdaLookup(AWS, config) {
 
 function proxy(config) {
   const {
-    'http-method': httpMethod,
+    'http-method': integrationHttpMethod,
     url: uri,
   } = config;
 
   return new Promise(resolve => resolve({
     type: 'HTTP',
-    httpMethod, uri,
+    integrationHttpMethod,
+    uri,
   }));
 }
 
