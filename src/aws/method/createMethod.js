@@ -75,11 +75,9 @@ export default function createMethod(method, config) {
     };
 
     console.log(`Creating method ${httpMethod}`);
-    console.log(`METHOD ${httpMethod}`, args);
 
     return promisify(gateway.putMethod, gateway)(args)
       .then(addIntegration(httpMethod, config)(data))
-      .catch(dat => console.log('ERROROROROR', dat))
       .then(_ => data); // restore data chain
       // .then(addIntegrationResponse)
       // .then(addMethodResponse);
