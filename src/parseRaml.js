@@ -3,7 +3,7 @@ import fs from 'fs'
 import util from 'util'
 
 function readFile(filename, data) {
-  return raml.loadFile(filename).then(definition => Object.assign({}, data, { definition }));
+  return raml.loadFile(filename, {applySchemas: false}).then(definition => Object.assign({}, data, { definition }));
 }
 
 export default function parseRaml(filename) {

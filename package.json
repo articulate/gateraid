@@ -10,7 +10,7 @@
     "js-yaml": "^3.4.6",
     "mustache": "^2.2.1",
     "ramda": "^0.19.0",
-    "raml-parser": "git+https://github.com/plukevdh/raml-js-parser.git#drop-schema-interpolation",
+    "raml-parser": "^0.8.15",
     "uuid-js": "^0.7.5"
   },
   "devDependencies": {
