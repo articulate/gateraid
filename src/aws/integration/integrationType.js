@@ -54,8 +54,6 @@ export default function integrationType(data, config) {
   const { AWS, awsConfig: { renderTemplate } } = data;
   const { type } = config;
 
-  console.log("TYPE", type);
-
   return cond([
     [equals('lambda'), always(lambda(AWS, config))],
     [equals('http-proxy'), always(proxy(config))],

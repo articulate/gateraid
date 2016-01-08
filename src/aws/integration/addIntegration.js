@@ -20,8 +20,6 @@ export default function addIntegration(httpMethod, config) {
   return function(data) {
     if(!type) { return new Promise(resolve => resolve(data)); }
 
-    console.log(`Creating integration request for ${httpMethod} of type ${type}`);
-
     const {
       apiId,
       rootResourceId,
@@ -55,7 +53,8 @@ export default function addIntegration(httpMethod, config) {
 
           console.log(`INTEGRATION ${httpMethod}`, args);
 
-          return promisify(gateway.putIntegration, gateway)(args);
+          return promisify(gateway.putIntegration, gateway)(args)
+            .then(resp => console.log(`Created integration request for ${httpMethod} on ${rootResourceId}`));
         }))
     .catch(err => console.error(err.stack))
     .then(_ => data);

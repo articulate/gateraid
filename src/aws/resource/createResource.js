@@ -8,13 +8,14 @@ export default function createResource(pathPart) {
       restApiId: apiId,
     };
 
-    console.log(`Creating resource /${pathPart}`);
-
     return new Promise((resolve, reject) => {
       gateway.createResource(args, (err, resp) => {
         if(err) { reject(err); }
         else {
-          resolve(Object.assign({}, data, { rootResourceId: resp.id }));
+          const { id } = resp;
+
+          console.log(`Created resource /${pathPart} with id ${id}`);
+          resolve(Object.assign({}, data, { rootResourceId: id }));
         }
       });
     });

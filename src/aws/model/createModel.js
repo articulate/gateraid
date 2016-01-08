@@ -13,8 +13,7 @@ export default function createModel(name, schema) {
       contentType: defaultContentType,
     };
 
-    console.log(`Creating model: ${name}`);
-
-    return promisify(gateway.createModel, gateway)(args);
+    return promisify(gateway.createModel, gateway)(args)
+      .then(resp => console.log(`Created model: ${name}`));
   }
 }

@@ -74,9 +74,8 @@ export default function createMethod(method, config) {
       requestModels: requestTypes,
     };
 
-    console.log(`Creating method ${httpMethod}`);
-
     return promisify(gateway.putMethod, gateway)(args)
+      .then(resp => console.log(`Created method ${httpMethod} on ${rootResourceId}`))
       .then(addIntegration(httpMethod, config)(data))
       .then(_ => data); // restore data chain
       // .then(addIntegrationResponse)
