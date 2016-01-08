@@ -1,6 +1,5 @@
 import R from 'ramda'
 
-import readFile from '../../utils/promisedFileRead'
 import promisify from '../../utils/promisify'
 
 const {
@@ -9,34 +8,30 @@ const {
   map,
   T: True,
   always,
+  merge,
 } = R;
 
 const rootPath = 'arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/';
+const mockRequest = always(new Promise(resolve => resolve({ type: 'MOCK' })))
 
-function renderTemplates(renderer, templates) {
-  return map(templateFile => {
-    readFile(templateFile)
-      .then(renderer);
-  }, templates);
-}
-
-function lambdaLookup(AWS, config) {
+function lambda(AWS, config) {
   const lambda = new AWS.Lambda();
   const iam = new AWS.IAM();
   const {
     'lambda-name': functionName,
     'iam-role': role,
+    requestTemplates,
   } = config;
 
   return Promise.all([
     promisify(lambda.getFunction, lambda)({FunctionName: functionName}),
     promisify(iam.getRole, iam)({RoleName: role}),
   ]).then(([func, role]) => {
-    return {
+    return merge(config, {
       type: 'AWS',
       uri: `${rootPath}${func.Configuration.FunctionArn}`,
       credentials: role.Role.Arn,
-    }
+    });
   });
 }
 
@@ -44,24 +39,26 @@ function proxy(config) {
   const {
     'http-method': integrationHttpMethod,
     url: uri,
+    requestTemplates,
   } = config;
 
-  return new Promise(resolve => resolve({
+  return new Promise(resolve => resolve(merge(config, {
     type: 'HTTP',
     integrationHttpMethod,
+    requestTemplates,
     uri,
-  }));
+  })));
 }
 
 export default function integrationType(data, config) {
   const { AWS, awsConfig: { renderTemplate } } = data;
-  const { type, requests } = config;
+  const { type } = config;
 
-  // console.log(renderTemplates(renderTemplate, requests));
+  console.log("TYPE", type);
 
   return cond([
-    [equals('lambda'), always(lambdaLookup(AWS, config))],
+    [equals('lambda'), always(lambda(AWS, config))],
     [equals('http-proxy'), always(proxy(config))],
-    [True, always(new Promise(resolve => resolve({ type: 'MOCK' })))],
+    [True, mockRequest],
   ])(type);
 }

@@ -15,7 +15,7 @@ function parse(yaml) {
 
   return readFile(env)
     .then(dotenv.parse)
-    .then(context => curry(Mustache.render)(_, context))
+    .then(context => curry(Mustache.render)(_, context, []))
     .then(contextRender => {
       return { renderTemplate: contextRender, endpoints };
     });
