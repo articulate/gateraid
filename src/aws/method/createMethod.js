@@ -1,5 +1,6 @@
 import R from 'ramda'
 
+import log from '../../utils/promiseChainLogger'
 import promisify from '../../utils/promisify'
 import addIntegration from '../integration/addIntegration'
 
@@ -75,10 +76,10 @@ export default function createMethod(method, config) {
     };
 
     return promisify(gateway.putMethod, gateway)(args)
-      .then(resp => console.log(`Created method ${httpMethod} on ${rootResourceId}`))
       .then(addIntegration(httpMethod, config)(data))
       .then(_ => data); // restore data chain
       // .then(addIntegrationResponse)
       // .then(addMethodResponse);
+      .then(log(`Created method ${httpMethod} on ${rootResourceId}`))
   }
 }

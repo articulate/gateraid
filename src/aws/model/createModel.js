@@ -1,4 +1,5 @@
 import promisify from '../../utils/promisify'
+import log from '../../utils/promiseChainLogger'
 
 const defaultContentType = 'application/json';
 
@@ -14,6 +15,6 @@ export default function createModel(name, schema) {
     };
 
     return promisify(gateway.createModel, gateway)(args)
-      .then(resp => console.log(`Created model: ${name}`));
+      .then(log(`Created model ${name}`));
   }
 }
