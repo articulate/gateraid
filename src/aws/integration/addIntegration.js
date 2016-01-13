@@ -1,6 +1,7 @@
 import R from 'ramda'
 
-import promisify from '../../utils/promisify'
+import log from '../../utils/promiseChainLogger'
+import promisify from '../../utils/promisifyPassthru'
 import integrationType from './integrationType'
 import renderTemplates from '../../renderTemplates'
 
@@ -27,36 +28,34 @@ export default function addIntegration(httpMethod, config) {
       awsConfig: { renderTemplate }
     } = data;
 
-    renderTemplates(renderTemplate, requests)
+    return renderTemplates(renderTemplate, requests)
       .then(rendered => assoc('requestTemplates', rendered, config))
-      .then(res => integrationType(data, res)
-        .then(config => {
-          const {
-            type,
-            credentials,
-            uri,
-            integrationHttpMethod = httpMethod,
-            requestTemplates,
-          } = config;
+      .then(curry(integrationType)(data))
+      .then(config => {
+        const {
+          type,
+          credentials,
+          uri,
+          integrationHttpMethod = httpMethod,
+          requestTemplates,
+        } = config;
 
-          const args = {
-            httpMethod,
-            credentials,
-            resourceId: rootResourceId,
-            restApiId: apiId,
-            type,
-            uri,
-            requestParameters,
-            integrationHttpMethod,
-            requestTemplates,
-          };
+        const args = {
+          httpMethod,
+          credentials,
+          resourceId: rootResourceId,
+          restApiId: apiId,
+          type,
+          uri,
+          requestParameters,
+          integrationHttpMethod,
+          requestTemplates,
+        };
 
-          console.log(`INTEGRATION ${httpMethod}`, args);
-
-          return promisify(gateway.putIntegration, gateway)(args)
-            .then(resp => console.log(`Created integration request for ${httpMethod} on ${rootResourceId}`));
-        }))
-    .catch(err => console.error(err.stack))
-    .then(_ => data);
+        return promisify(gateway.putIntegration, gateway)(args)
+          .then(log(`Created integration request for ${httpMethod} on ${rootResourceId}`))
+          .catch(err => console.error(err.stack))
+          .then(_ => data);
+      });
   }
 }

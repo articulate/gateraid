@@ -2,14 +2,15 @@ import R from 'ramda'
 
 import log from '../../utils/promiseChainLogger'
 import promisify from '../../utils/promisify'
+import formatSchemas from '../../utils/formatSchemas'
 import addIntegration from '../integration/addIntegration'
+import addMethodResponses from '../response/addMethodResponses'
+import addIntegrationResponses from '../response/addIntegrationResponses'
 
 const {
-  filter,
   map,
   mapObjIndexed,
   compose,
-  keys,
   mergeAll,
   assoc,
   flatten,
@@ -19,9 +20,6 @@ const {
   isEmpty,
   all,
 } = R;
-
-const hasSchema = (mimeType) => !!mimeType.schema;
-const getSchema = (mimeType) => mimeType.schema;
 
 function formatParam(type, _index, name, details) {
   const { [name]: { required } } = details;
@@ -48,10 +46,12 @@ export default function createMethod(method, config) {
     queryParameters,
     headers,
     uriParameters,
+    responses,
   } = method;
 
   const {
     params = {},
+    responses: responsesConfig = {},
   } = config;
 
   const httpMethod = rawMethod.toUpperCase();
@@ -61,9 +61,7 @@ export default function createMethod(method, config) {
     let requestTypes = {};
 
     // create responses for multiple mime-types
-    if(body) {
-      requestTypes = compose(R.map(getSchema), filter(hasSchema))(body);
-    }
+    if(body) { requestTypes = formatSchemas(body); }
 
     const args = {
       httpMethod,
@@ -76,10 +74,11 @@ export default function createMethod(method, config) {
     };
 
     return promisify(gateway.putMethod, gateway)(args)
-      .then(addIntegration(httpMethod, config)(data))
-      .then(_ => data); // restore data chain
-      // .then(addIntegrationResponse)
-      // .then(addMethodResponse);
       .then(log(`Created method ${httpMethod} on ${rootResourceId}`))
+      .then(_ => data)
+      .then(addIntegration(httpMethod, config))
+      .then(addMethodResponses(httpMethod, responses))
+      .then(addIntegrationResponses(httpMethod, responsesConfig))
+      .catch(err => console.error(err.stack));
   }
 }
