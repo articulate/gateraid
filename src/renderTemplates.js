@@ -9,7 +9,6 @@ const {
   assoc,
   is,
   both,
-  T: True,
 } = R;
 
 const isFile = both(

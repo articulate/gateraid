@@ -53,9 +53,7 @@ export default function addIntegration(httpMethod, config) {
         };
 
         return promisify(gateway.putIntegration, gateway)(args)
-          .then(log(`Created integration request for ${httpMethod} on ${rootResourceId}`))
-          .catch(err => console.error(err.stack))
-          .then(_ => data);
-      });
+          .then(log(`Created integration request for ${httpMethod} on ${rootResourceId}`));
+      }).then(_ => data);
   }
 }

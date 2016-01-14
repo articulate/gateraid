@@ -3,10 +3,6 @@ import addMethodResponse from './addMethodResponse'
 
 const {
   mapObjIndexed,
-  curry,
-  __: _,
-  isEmpty,
-  values,
 } = R;
 
 export default function addMethodResponses(httpMethod, responses) {
@@ -21,9 +17,9 @@ export default function addMethodResponses(httpMethod, responses) {
     mapObjIndexed((responseDefn, statusCode) => {
       promise = promise
         .then(addMethodResponse(httpMethod, statusCode, responseDefn))
-        .then(_ => data)
+        .then(_ => data);
     }, responses);
 
-    return promise.then(_ => data); // restore data chain
+    return promise;
   }
 }

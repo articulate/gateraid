@@ -5,14 +5,14 @@ import formatSchemas from '../../utils/formatSchemas'
 export default function addMethodResponse(httpMethod, statusCode, responseDefn) {
   const {
     body,
-  } = responseDefn;
+    } = responseDefn;
 
   return function (data) {
     const {
       gateway,
-      rootResourceId,
-      apiId,
-    } = data;
+      rootResourceId: resourceId,
+      apiId: restApiId,
+      } = data;
 
     let responseModels = {};
 
@@ -21,8 +21,8 @@ export default function addMethodResponse(httpMethod, statusCode, responseDefn) 
     }
 
     const args = {
-      restApiId: apiId,
-      resourceId: rootResourceId,
+      restApiId,
+      resourceId,
       httpMethod,
       statusCode,
       responseModels,
@@ -30,6 +30,6 @@ export default function addMethodResponse(httpMethod, statusCode, responseDefn) 
     };
 
     return promisify(gateway.putMethodResponse, gateway)(args)
-      .then(log(`Created method response for ${statusCode} to method ${httpMethod} on ${rootResourceId}`));
+      .then(log(`Created method response for ${statusCode} to method ${httpMethod} on ${resourceId}`));
   }
 }

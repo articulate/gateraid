@@ -50,14 +50,17 @@ export default function createMethod(method, config) {
   } = method;
 
   const {
-    params = {},
     responses: responsesConfig = {},
   } = config;
 
   const httpMethod = rawMethod.toUpperCase();
 
   return function(data) {
-    const { gateway, apiId, rootResourceId, awsConfig: { templateRender } } = data;
+    const {
+      gateway,
+      apiId: restApiId,
+      rootResourceId: resourceId
+    } = data;
     let requestTypes = {};
 
     // create responses for multiple mime-types
@@ -65,8 +68,8 @@ export default function createMethod(method, config) {
 
     const args = {
       httpMethod,
-      restApiId: apiId,
-      resourceId: rootResourceId,
+      restApiId,
+      resourceId,
       authorizationType: 'NONE',
       apiKeyRequired: false,
       requestParameters: formatParams(uriParameters, queryParameters, headers),
@@ -74,11 +77,10 @@ export default function createMethod(method, config) {
     };
 
     return promisify(gateway.putMethod, gateway)(args)
-      .then(log(`Created method ${httpMethod} on ${rootResourceId}`))
       .then(_ => data)
+      .then(log(`Created method ${httpMethod} on ${resourceId}`))
       .then(addIntegration(httpMethod, config))
       .then(addMethodResponses(httpMethod, responses))
-      .then(addIntegrationResponses(httpMethod, responsesConfig))
-      .catch(err => console.error(err.stack));
+      .then(addIntegrationResponses(httpMethod, responsesConfig));
   }
 }

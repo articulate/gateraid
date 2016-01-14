@@ -9,10 +9,12 @@ export default function addIntegrationResponses(httpMethod, responses) {
   return function(data) {
     let promise = Promise.resolve(data);
 
-    mapObjIndexed((defn, pattern) =>
-      promise = promise.then(addIntegrationResponse(httpMethod, pattern, defn, data))
-      , responses);
+    mapObjIndexed((defn, pattern) => {
+      promise = promise
+        .then(addIntegrationResponse(httpMethod, pattern, defn, data))
+        .then(_ => data);
+    }, responses);
 
-    return promise.then(_ => data);
+    return promise;
   }
 }

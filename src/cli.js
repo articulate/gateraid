@@ -41,7 +41,7 @@ program
         const { apiId, config } = data;
 
         config.set('api.id', apiId);
-        console.log(`Created API Gateway ${apiId}`);
+        console.log(`Finished building API ${apiId}`);
         return data;
       })
       .then(data => {
@@ -50,10 +50,7 @@ program
 
         return data;
       })
-      .catch(err => {
-        // destroyApi(data);
-        handleError(err);
-      });
+      .catch(handleError);
   });
 
 program
@@ -65,7 +62,7 @@ program
       .then(prepareAws)
       .then(destroyApi)
       .then(data => {
-        const { apiId, config } = data;
+        const { config } = data;
 
         config.remove('api.id');
       })
