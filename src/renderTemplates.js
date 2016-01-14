@@ -1,5 +1,5 @@
 import R from 'ramda'
-
+import 'babel-polyfill'
 import readFile from './utils/promisedFileRead'
 
 const {
