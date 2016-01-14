@@ -1,6 +1,6 @@
 import fs from 'fs'
 
-const defaultFile = "./.gater.json"
+const defaultFile = "./.gateraid.json"
 
 function _read(configFile) {
   try {

@@ -2,7 +2,7 @@
   "name": "gateraid",
   "version": "0.0.1",
   "description": "RAML to API Gateway tool",
-  "main": "index.js",
+  "main": "./lib/cli.js",
   "dependencies": {
     "aws-sdk": "^2.2.19",
     "commander": "^2.9.0",
@@ -21,8 +21,8 @@
     "babel-preset-es2015": "^6.3.13"
   },
   "scripts": {
-    "build": "node_modules/.bin/babel --out-dir build src",
-    "clean": "rm -r ./build/*"
+    "build": "./node_modules/.bin/babel --out-dir lib src",
+    "clean": "rm -r ./lib/*"
   },
   "babel": {
     "presets": [
@@ -38,7 +38,6 @@
     "aws"
   ],
   "bin": {
-    "gater": "./bin/gater",
     "gateraid": "./bin/gateraid"
   },
   "author": "Luke van der Hoeven",
