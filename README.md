@@ -163,5 +163,13 @@ Which when rendered as part of the request/response template in the API Gateway,
 }
 ```
 
+## Dev Help
+
+Build code: `npm run build`
+Run: `./bin/gateraid -h`
+
+Run tests: `npm run test`
+
+
 [1]: https://aws.amazon.com/api-gateway/
 [2]: http://raml.org/
