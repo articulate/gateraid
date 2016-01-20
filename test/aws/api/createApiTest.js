@@ -13,10 +13,10 @@ describe("createApi", () => {
     definition: { title: "New API Thing Here" },
   };
 
-  const api = createApi(data);
 
   it("creates the API via the SDK", () => {
+    createApi(data);
+
     expect(stub).to.have.been.calledWith({ name: 'Big API', description: "New API Thing Here" });
-    return expect(api).to.eventually.have.property('apiId', '123');
   });
 });

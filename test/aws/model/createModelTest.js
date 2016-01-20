@@ -15,17 +15,14 @@ describe("createModel", () => {
   };
 
   it('calls out to AWS SDK createModel with schema definition', () => {
-    const promise = createModel('Session', rawSchema)(data);
+    createModel('Session', rawSchema)(data);
 
-    return expect(promise).to.eventually.be.fulfilled
-      .then(() => {
-        expect(stub).to.have.been.calledWith({
-          name: 'Session',
-          schema: rawSchema,
-          restApiId: '123',
-          description: schema.title,
-          contentType: 'application/json',
-        });
-      });
+    expect(stub).to.have.been.calledWith({
+      name: 'Session',
+      schema: rawSchema,
+      restApiId: '123',
+      description: schema.title,
+      contentType: 'application/json',
+    });
   });
 });
