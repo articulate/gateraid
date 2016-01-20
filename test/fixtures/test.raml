@@ -1,0 +1,61 @@
+#%RAML 0.8
+
+title: Test API
+version: v1
+baseUri: https://api.example.com/v1/
+mediaType: application/json
+schemas:
+  - SessionRequest: !include schemas/requests/session.json
+  - Session: !include schemas/responses/session.json
+
+/session:
+  get:
+    description:
+      Retreives login session from external API
+    headers:
+      Accept-Language:
+        description: The user's language.
+        type: string
+        required: true
+        example: 'en-US'
+    queryParameters:
+      _heyo_session_id:
+        description: Login session id.
+        type: string
+        required: true
+    responses:
+      200:
+        body:
+          application/json: {}
+      404:
+        body:
+          application/json: {}
+
+  post:
+    description:
+      User Login.
+    body:
+      application/x-www-form-urlencoded:
+        formParameters:
+          email:
+            description: Email Address.
+            type: string
+          password:
+            description: Password.
+            type: string
+      application/json:
+        schema: SessionRequest
+    responses:
+      200:
+        body:
+          application/json:
+            schema: Session
+      401:
+        body:
+          application/json: {}
+      405:
+        body:
+          application/json: {}
+      408:
+        body:
+          application/json: {}

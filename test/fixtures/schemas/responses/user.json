@@ -1,0 +1,43 @@
+{
+  "title": "User Schema",
+  "type": "object",
+  "properties": {
+    "last_name": {
+      "type": "string"
+    },
+    "first_name": {
+      "type": "string"
+    },
+    "product_name": {
+      "type": "string"
+    },
+    "accept_language": {
+      "type": "string"
+    },
+    "company": {
+      "type": "string"
+    },
+    "phone": {
+      "type": "string"
+    },
+    "country": {
+      "type": "string"
+    },
+    "lead_source": {
+      "type": "string"
+    },
+    "region": {
+      "type": "string"
+    },
+    "email": {
+      "type": "string"
+    },
+    "uid": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "email",
+    "uid"
+  ]
+}

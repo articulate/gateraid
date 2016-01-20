@@ -1,0 +1,16 @@
+{
+  "title": "Session Schema",
+  "type": "object",
+  "properties": {
+    "session_id": {
+      "type": "string"
+    },
+    "email": {
+      "type": "string"
+    },
+    "uid": {
+      "type": "string"
+    }
+  },
+  "required": ["session_id", "email", "uid"]
+}
