@@ -11,5 +11,5 @@ export default function createModels(data) {
   });
 
   return Promise.all(promises)  // synchronize
-    .then(() => data);  // restore data chain
+    .then(_ => data);  // restore data chain
 }

@@ -1,9 +1,13 @@
+import R from 'ramda'
 import raml from 'raml-parser'
-import fs from 'fs'
-import util from 'util'
+
+const {
+  merge,
+} = R;
 
 function readFile(filename, data) {
-  return raml.loadFile(filename, {applySchemas: false}).then(definition => Object.assign({}, data, { definition }));
+  return raml.loadFile(filename, {applySchemas: false})
+    .then(definition => merge({ definition }, data));
 }
 
 export default function parseRaml(filename) {

@@ -6,11 +6,12 @@ const defaultContentType = 'application/json';
 export default function createModel(name, schema) {
   return function(data) {
     const { gateway, apiId } = data;
+    const parsed = JSON.parse(schema);
     const args = {
       name,
-      schema,
+      schema: schema,
       restApiId: apiId,
-      description: schema.title,
+      description: parsed.title,
       contentType: defaultContentType,
     };
 

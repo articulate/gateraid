@@ -1,12 +1,15 @@
 import AWS from 'aws-sdk'
+import R from 'ramda'
 
-const defaultRegion = 'us-east-1';
+const {
+  merge,
+} = R;
 
 export default function prepareAws(data) {
-  const { options: { parent: { profile } } } = data;
-
+  const { options: { parent: { profile, region } } } = data;
   const credentials = new AWS.SharedIniFileCredentials({ profile });
-  AWS.config.update({ credentials, region: defaultRegion });
 
-  return Object.assign({}, data, { AWS, gateway: new AWS.APIGateway() });
+  AWS.config = new AWS.Config({ credentials, region });
+
+  return merge({ AWS, gateway: new AWS.APIGateway() }, data);
 }

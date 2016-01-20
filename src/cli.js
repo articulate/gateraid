@@ -7,7 +7,7 @@ import parseRaml from './parseRaml'
 import generateConfigHandler from './generateConfigHandler'
 
 import createApi from './aws/api/createApi'
-import removeDefaultModels from './aws/removeDefaultModels'
+import removeDefaultModels from './aws/model/removeDefaultModels'
 import createModels from './aws/createModels'
 import buildResources from './aws/buildResources'
 import destroyApi from './aws/api/destroyApi'
@@ -20,7 +20,8 @@ function handleError(err) {
 program
   .version('0.0.1')
   .usage('[options] <NAME>')
-  .option('-p, --profile [profile]', 'Select AWS credential profile to use [default].', 'default')
+  .option('-p, --profile [profile]', 'Select AWS credential profile to use.', 'default')
+  .option('-r, --region [us-east-1]', 'Select AWS region to use.', 'us-east-1')
 
 program
   .command('create <filename>')
