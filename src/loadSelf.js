@@ -5,6 +5,8 @@ import promisify from './utils/promisify'
 import readFile from './utils/promisedFileRead'
 import renderTemplates from './utils/renderTemplates'
 
+import createResource from './aws/resource/createResource'
+
 const utils = {
   log,
   promisify,
@@ -12,6 +14,10 @@ const utils = {
   renderTemplates,
 }
 
+const lib = {
+  createResource,
+}
+
 export default function loadSelf(data) {
-  return merge({ utils }, data);
+  return merge({ utils, lib }, data);
 };
