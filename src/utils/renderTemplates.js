@@ -1,14 +1,15 @@
 import R from 'ramda'
 import 'babel-polyfill'
-import readFile from './utils/promisedFileRead'
 
 const {
-  mapObjIndexed,
-  values,
-  mergeAll,
   assoc,
-  is,
   both,
+  cond,
+  is,
+  mapObjIndexed,
+  mergeAll,
+  values,
+  T: True,
 } = R;
 
 const isFile = both(
@@ -20,13 +21,25 @@ const mimeMap = {
   json: 'application/json',
 }
 
-export default function renderTemplates(renderer, templates) {
+const contentResolver = cond([
+  [is(Object), JSON.stringify],
+  [True, val => val],
+]);
+
+export default function renderTemplates(templates, data) {
+  const {
+    utils: { readFile },
+    awsConfig: { renderTemplate }
+  } = data;
+
   const promises = values(mapObjIndexed((pathOrTemplate, mime) => {
-    if(!isFile(pathOrTemplate)) { return Promise.resolve(assoc(mimeMap[mime], JSON.stringify(pathOrTemplate), {})); }
+    if(!isFile(pathOrTemplate)) {
+      return Promise.resolve(assoc(mimeMap[mime], contentResolver(pathOrTemplate), {}));
+    }
 
     return readFile(pathOrTemplate)
       .then(buf => buf.toString()) // reader returns a Buffer, renderer expects a String
-      .then(renderer)
+      .then(renderTemplate)
       .then(rendered => assoc(mimeMap[mime], rendered, {}));
   }, templates));
 

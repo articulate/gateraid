@@ -2,6 +2,7 @@ import program from 'commander'
 import path from 'path'
 
 import loadConfig from './loadConfig'
+import loadSelf from './loadSelf'
 import prepareAws from './prepareAws'
 import parseRaml from './parseRaml'
 import generateConfigHandler from './generateConfigHandler'
@@ -31,6 +32,7 @@ program
   .option('-t, --test', 'Test operations. Remove after creating.', false)
   .action(function(filename, options) {
     loadConfig(options)
+      .then(loadSelf)
       .then(prepareAws)
       .then(parseRaml(filename))
       .then(createApi)

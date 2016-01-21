@@ -1,7 +1,3 @@
-import promisify from '../../utils/promisify'
-import log from '../../utils/promiseChainLogger'
-import renderTemplates from '../../renderTemplates'
-
 export default function addIntegrationResponse(httpMethod, selectionPattern, config) {
   const {
     'status-code': intStatusCode,
@@ -15,10 +11,10 @@ export default function addIntegrationResponse(httpMethod, selectionPattern, con
       gateway,
       rootResourceId: resourceId,
       apiId: restApiId,
-      awsConfig: { renderTemplate },
-      } = data;
+      utils: { promisify, log, renderTemplates }
+    } = data;
 
-    return renderTemplates(renderTemplate, templates)
+    return renderTemplates(templates, data)
       .then(rendered => {
         const args = {
           restApiId,

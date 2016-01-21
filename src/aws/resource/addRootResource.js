@@ -1,3 +1,13 @@
+import R from 'ramda'
+
+const {
+  assoc,
+  find,
+  propEq,
+} = R;
+
+const isRoot = propEq('path', '/');
+
 export default function addRootResource(data) {
   const { gateway, apiId } = data;
 
@@ -5,7 +15,8 @@ export default function addRootResource(data) {
     gateway.getResources({ restApiId: apiId }, (err, resp) => {
       if(err) { reject(err); }
       else {
-        resolve(Object.assign({}, data, { rootResourceId: resp.items[0].id }));
+        const root = find(isRoot, resp.items);
+        resolve(assoc('rootResourceId', root.id, data));
       }
     });
   });

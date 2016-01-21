@@ -12,7 +12,7 @@ export default function createResources(resources) {
           [relativeUri]: resourceConfig,
         }}} = data;
 
-      return createResource(relativeUri.replace('/', ''))(data)
+      return createResource(relativeUri)(data)
         .then(createMethods(methods, resourceConfig))
         .then(createResources(resources));
     });

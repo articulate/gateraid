@@ -1,28 +1,47 @@
 import fs from 'fs'
 import sinon from 'sinon'
 import createModel from '../../../src/aws/model/createModel'
+import fixture from '../../fixtures/schemas/requests/session.json';
 
 describe("createModel", () => {
-  let stub = sinon.stub();
-  stub.yields(null, 'success');
+  const stub = sinon.stub();
+  let rawSchema;
+  let data;
 
-  const rawSchema = fs.readFileSync('./test/fixtures/schemas/requests/session.json').toString();
-  const schema = JSON.parse(rawSchema);
+  beforeEach(() => {
+    rawSchema = JSON.stringify(fixture);
 
-  const data = {
-    gateway: {createModel: stub},
-    apiId: '123',
-  };
+    data = {
+      gateway: {createModel: stub},
+      apiId: '123',
+    };
+  });
 
-  it('calls out to AWS SDK createModel with schema definition', () => {
-    createModel('Session', rawSchema)(data);
+  context("success", () => {
+    beforeEach(() => {
+      stub.yields(null, 'success');
+    });
 
-    expect(stub).to.have.been.calledWith({
-      name: 'Session',
-      schema: rawSchema,
-      restApiId: '123',
-      description: schema.title,
-      contentType: 'application/json',
+    it('calls out to AWS SDK createModel with schema definition', () => {
+      createModel('Session', rawSchema)(data);
+
+      expect(stub).to.have.been.calledWith({
+        name: 'Session',
+        schema: rawSchema,
+        restApiId: '123',
+        description: fixture.title,
+        contentType: 'application/json',
+      });
+    });
+  });
+
+  context("failures", () => {
+    beforeEach(() => {
+      stub.yields('error', null);
+    });
+
+    it('rejects if error is returned', () => {
+      expect(createModel('Session', rawSchema)(data)).to.be.rejected;
     });
   });
 });

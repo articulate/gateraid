@@ -1,12 +1,20 @@
-export default function createResource(pathPart) {
-  return function(data) {
-    const { gateway, apiId, rootResourceId } = data;
+import R from 'ramda'
 
-    const args = {
-      pathPart,
-      parentId: rootResourceId,
-      restApiId: apiId,
-    };
+const {
+  assoc,
+} = R;
+
+export default function createResource(path) {
+  const pathPart = path.replace(/\//g, '');
+
+  return function(data) {
+    const {
+      gateway,
+      apiId: restApiId,
+      rootResourceId: parentId,
+    } = data;
+
+    const args = { pathPart, parentId, restApiId };
 
     return new Promise((resolve, reject) => {
       gateway.createResource(args, (err, resp) => {
@@ -15,7 +23,7 @@ export default function createResource(pathPart) {
           const { id } = resp;
 
           console.log(`Created resource /${pathPart} with id ${id}`);
-          resolve(Object.assign({}, data, { rootResourceId: id }));
+          resolve(assoc('rootResourceId', id, data));
         }
       });
     });

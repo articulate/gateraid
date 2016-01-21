@@ -1,9 +1,6 @@
 import R from 'ramda'
 
-import log from '../../utils/promiseChainLogger'
-import promisify from '../../utils/promisifyPassthru'
 import integrationType from './integrationType'
-import renderTemplates from '../../renderTemplates'
 
 const {
   assoc,
@@ -25,10 +22,10 @@ export default function addIntegration(httpMethod, config) {
       apiId,
       rootResourceId,
       gateway,
-      awsConfig: { renderTemplate }
+      utils: { log, promisify, renderTemplates }
     } = data;
 
-    return renderTemplates(renderTemplate, requests)
+    return renderTemplates(requests, data)
       .then(rendered => assoc('requestTemplates', rendered, config))
       .then(curry(integrationType)(data))
       .then(config => {

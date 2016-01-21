@@ -1,0 +1,2 @@
+clientId=testing123
+clientSecret=hello-world

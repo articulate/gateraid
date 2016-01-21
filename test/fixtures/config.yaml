@@ -1,0 +1,28 @@
+env: settings.txt
+endpoints:
+  /session:
+    get:
+      type: http-proxy
+      url: https://api.example.com/sessions
+      http-method: GET
+      params:
+        integration.request.header.Authorization: method.request.querystring.hello
+      requests:
+        form: templates/demo.mustache
+        json: templates/demo.mustache
+      responses:
+        default:
+          status-code: 200
+          templates:
+            json: templates/demo.mustache
+    post:
+      type: lambda
+      lambda-name: my-function
+      iam-role: LambdaRole
+      responses:
+        'Unauthorized: Invalid .*':
+          status-code: 400
+          templates:
+            json: {}
+        default:
+          status-code: 200
