@@ -6,18 +6,17 @@ describe("renderTemplates", () => {
   beforeEach(() => {
     data = {
       awsConfig: { renderTemplate: () => 'Rendered Content' },
-      utils: {
-        readFile: () => { return Promise.resolve('Hello World'); },
-      }
+      utils: { readFile: () => { return Promise.resolve('Hello World'); } },
     }
   });
 
-  const templates = {
-    form: "./test/fixtures/templates/demo.mustache",
-    json: {},
-  };
 
   it('renders each path with the given renderer', () => {
+    const templates = {
+      form: "./test/fixtures/templates/demo.mustache",
+      json: {},
+    };
+
     const result = renderTemplates(templates, data);
 
     expect(result).to.eventually.eql(JSON.stringify({
