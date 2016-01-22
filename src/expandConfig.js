@@ -8,6 +8,7 @@ import readFile from './utils/promisedFileRead'
 const {
   __: _,
   curry,
+  assoc,
 } = R;
 
 function parse(yaml) {
@@ -23,7 +24,10 @@ function parse(yaml) {
 
 // returns an object form of { renderTemplate, endpoints }
 export default function expandConfig(filepath) {
-  return readFile(filepath)
-    .then(yaml.safeLoad)
-    .then(parse);
+  return function(data) {
+    return readFile(filepath)
+      .then(yaml.safeLoad)
+      .then(parse)
+      .then(curry(assoc)('awsConfig', _, data));
+  }
 }
