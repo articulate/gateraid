@@ -1,13 +1,15 @@
 import R from 'ramda'
 
 const {
-  map,
-  filter,
   compose,
+  filter,
+  is,
+  pluck,
+  prop,
 } = R;
 
-const hasSchema = (mimeType) => !!mimeType.schema;
-const getSchema = (mimeType) => mimeType.schema;
-const formatSchemas = compose(map(getSchema), filter(hasSchema));
+const getSchema = pluck('schema');
+const hasSchema = compose(is(String), prop('schema'));
+const formatSchemas = compose(getSchema, filter(hasSchema));
 
 export default formatSchemas;
