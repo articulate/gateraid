@@ -1,8 +1,5 @@
 import R from 'ramda'
 
-import log from '../../utils/promiseChainLogger'
-import promisify from '../../utils/promisify'
-import formatSchemas from '../../utils/formatSchemas'
 import addIntegration from '../integration/addIntegration'
 import addMethodResponses from '../response/addMethodResponses'
 import addIntegrationResponses from '../response/addIntegrationResponses'
@@ -57,6 +54,7 @@ export default function createMethod(method, config) {
 
   return function(data) {
     const {
+      utils: { log, promisify, formatSchemas },
       gateway,
       apiId: restApiId,
       rootResourceId: resourceId
