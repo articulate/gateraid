@@ -51,7 +51,7 @@ function proxy(config) {
 }
 
 export default function integrationType(data, config) {
-  const { AWS, awsConfig: { renderTemplate } } = data;
+  const { AWS } = data;
   const { type } = config;
 
   return cond([

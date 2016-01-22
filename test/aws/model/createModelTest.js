@@ -1,5 +1,6 @@
 import fs from 'fs'
 import sinon from 'sinon'
+
 import createModel from '../../../src/aws/model/createModel'
 import fixture from '../../fixtures/schemas/requests/session.json';
 
