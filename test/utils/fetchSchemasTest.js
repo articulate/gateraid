@@ -1,6 +1,6 @@
-import formatSchema from '../../src/utils/formatSchemas'
+import fetchSchemas from '../../src/utils/fetchSchemas'
 
-describe('formatSchema', () => {
+describe('fetchSchemas', () => {
 
   context('with schemas present', () => {
     const raw = {
@@ -9,7 +9,7 @@ describe('formatSchema', () => {
     };
 
     it('generates a map of schemas keyed by associated mime type', () => {
-      expect(formatSchema(raw)).to.eql({
+      expect(fetchSchemas(raw)).to.eql({
         "application/json": 'Session',
         "application/x-www-form-encoded": 'SessionForm'
       });
@@ -22,7 +22,7 @@ describe('formatSchema', () => {
     };
 
     it('returns an empty object', () => {
-      expect(formatSchema(raw)).to.eql({});
+      expect(fetchSchemas(raw)).to.eql({});
     });
   });
 
@@ -30,7 +30,13 @@ describe('formatSchema', () => {
     const raw = {};
 
     it('returns an empty object', () => {
-      expect(formatSchema(raw)).to.eql({});
+      expect(fetchSchemas(raw)).to.eql({});
     });
   });
+
+  context('with undefined', () => {
+    it('returns an empty object', () => {
+      expect(fetchSchemas(undefined)).to.eql({});
+    });
+  })
 });

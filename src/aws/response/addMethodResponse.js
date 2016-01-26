@@ -1,6 +1,6 @@
 import log from '../../utils/promiseChainLogger'
 import promisify from '../../utils/promisify'
-import formatSchemas from '../../utils/formatSchemas'
+import fetchSchemas from '../../utils/fetchSchemas'
 
 export default function addMethodResponse(httpMethod, statusCode, responseDefn) {
   const {
@@ -17,7 +17,7 @@ export default function addMethodResponse(httpMethod, statusCode, responseDefn) 
     let responseModels = {};
 
     if (body) {
-      responseModels = formatSchemas(body);
+      responseModels = fetchSchemas(body);
     }
 
     const args = {

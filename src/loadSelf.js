@@ -4,20 +4,22 @@ import log from './utils/promiseChainLogger'
 import promisify from './utils/promisify'
 import readFile from './utils/promisedFileRead'
 import renderTemplates from './utils/renderTemplates'
-import formatSchemas from './utils/formatSchemas'
+import fetchSchemas from './utils/fetchSchemas'
 
 import createResource from './aws/resource/createResource'
+import createMethod from './aws/method/createMethod'
 
 const utils = {
   log,
   promisify,
   readFile,
   renderTemplates,
-  formatSchemas,
+  fetchSchemas,
 }
 
 const lib = {
   createResource,
+  createMethod,
 }
 
 export default function loadSelf(data) {

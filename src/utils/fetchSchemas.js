@@ -2,6 +2,7 @@ import R from 'ramda'
 
 const {
   compose,
+  defaultTo,
   filter,
   is,
   pluck,
@@ -10,6 +11,8 @@ const {
 
 const getSchema = pluck('schema');
 const hasSchema = compose(is(String), prop('schema'));
-const formatSchemas = compose(getSchema, filter(hasSchema));
 
-export default formatSchemas;
+// try to ensure we always get an object back
+const fetchSchemas = compose(getSchema, filter(hasSchema), defaultTo({}));
+
+export default fetchSchemas;
