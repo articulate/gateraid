@@ -1,0 +1,36 @@
+{
+  "description": "Retreives login session from _heyo_session_id",
+  "headers": {
+    "Accept-Language": {
+      "description": "The user's language.",
+      "type": "string",
+      "required": true,
+      "example": "en-US",
+      "displayName": "Accept-Language"
+    }
+  },
+  "queryParameters": {
+    "_heyo_session_id": {
+      "description": "Login session id.",
+      "type": "string",
+      "required": true,
+      "displayName": "_heyo_session_id"
+    }
+  },
+  "responses": {
+    "200": {
+      "body": {
+        "application/json": {}
+      }
+    },
+    "404": {
+      "body": {
+        "application/json": {}
+      }
+    }
+  },
+  "protocols": [
+    "HTTPS"
+  ],
+  "method": "get"
+}

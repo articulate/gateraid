@@ -1,4 +1,4 @@
-import createMethod from './createMethod'
+import buildAction from '../../buildAction'
 
 export default function createMethods(methods, methodsConfig={}) {
   return function(data) {
@@ -8,7 +8,7 @@ export default function createMethods(methods, methodsConfig={}) {
       const { method: rawMethod } = method;
       const config = methodsConfig[rawMethod] || {};
 
-      return createMethod(method, config)(data);
+      return buildAction(method, config)(data);
     });
 
     return Promise.all(promises)
