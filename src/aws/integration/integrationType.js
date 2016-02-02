@@ -20,7 +20,6 @@ function lambda(AWS, config) {
   const {
     'lambda-name': functionName,
     'iam-role': role,
-    requestTemplates,
   } = config;
 
   return Promise.all([

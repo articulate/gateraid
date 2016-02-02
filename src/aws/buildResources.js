@@ -3,7 +3,7 @@ import createResourcePath from './resource/createResourcePath'
 import createResources from './resource/createResources'
 
 export default function buildResources(data) {
-  const { definition: { resources }} = data;
+  const { definition: { resources } } = data;
 
   return addRootResource(data)
     .then(createResourcePath)
