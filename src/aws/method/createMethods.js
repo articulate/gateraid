@@ -1,14 +1,22 @@
+import R from 'ramda'
 import buildAction from '../../buildAction'
 
-export default function createMethods(methods, methodsConfig={}) {
-  return function(data) {
-    if(methods == undefined) { return Promise.resolve(data); }
+const {
+  assoc,
+  concat,
+} = R;
+
+export default function createMethods(methods) {
+  return function (data) {
+    if (!methods) { return Promise.resolve(data); }
+
+    const { resourcePath } = data;
 
     const promises = methods.map(method => {
-      const { method: rawMethod } = method;
-      const config = methodsConfig[rawMethod] || {};
+      const { method: httpMethod } = method;
+      const methodPath = concat(resourcePath, httpMethod);
 
-      return buildAction(method, config)(data);
+      return buildAction(method)(assoc('resourcePath', methodPath, data));
     });
 
     return Promise.all(promises)
