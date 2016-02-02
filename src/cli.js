@@ -4,6 +4,7 @@ import path from 'path'
 import loadConfig from './loadConfig'
 import loadSelf from './loadSelf'
 import prepareAws from './prepareAws'
+import configureUtils from './configureUtils'
 import parseRaml from './parseRaml'
 import generateConfigHandler from './generateConfigHandler'
 
@@ -32,8 +33,9 @@ program
   .option('-t, --test', 'Test operations. Remove after creating.', false)
   .action(function(filename, options) {
     loadConfig(options)
-      .then(loadSelf)
       .then(prepareAws)
+      .then(loadSelf)
+      .then(configureUtils)
       .then(parseRaml(filename))
       .then(createApi)
       .then(removeDefaultModels)

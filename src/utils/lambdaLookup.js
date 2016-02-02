@@ -6,7 +6,7 @@ export default function lambdaLookup(data) {
   const lambda = new Lambda();
   const promise = promisify(lambda.getFunction, lambda);
 
-  return function(lambdaName) {
-    return promise({FunctionName: lambdaName});
+  return function(FunctionName) {
+    return promise({ FunctionName });
   }
 }
