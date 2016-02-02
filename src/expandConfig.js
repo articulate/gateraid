@@ -8,26 +8,23 @@ import readFile from './utils/promisedFileRead'
 const {
   __: _,
   curry,
-  assoc,
+  merge,
 } = R;
 
 function parse(yaml) {
-  const { env, endpoints } = yaml;
+  const { env, endpoints: resourceConfig } = yaml;
 
   return readFile(env)
     .then(dotenv.parse)
     .then(context => curry(Mustache.render)(_, context, []))
-    .then(contextRender => {
-      return { renderTemplate: contextRender, endpoints };
-    });
+    .then(renderTemplate => ({ renderTemplate, resourceConfig }));
 }
 
-// returns an object form of { renderTemplate, endpoints }
 export default function expandConfig(filepath) {
   return function(data) {
     return readFile(filepath)
       .then(yaml.safeLoad)
       .then(parse)
-      .then(curry(assoc)('awsConfig', _, data));
+      .then(curry(merge)(_, data));
   }
 }

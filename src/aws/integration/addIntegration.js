@@ -1,56 +1,20 @@
-import R from 'ramda'
+export default function addIntegration(method) {
+  let { method: httpMethod } = method;
+  httpMethod = httpMethod.toUpperCase();
 
-import integrationType from './integrationType'
-
-const {
-  assoc,
-  curry,
-} = R;
-
-
-export default function addIntegration(httpMethod, config) {
-  const {
-    type,
-    params: requestParameters = {},
-    requests = {},
-  } = config;
-
-  return function(data) {
-    if(!type) { return new Promise(resolve => resolve(data)); }
-
+  return function (data) {
     const {
-      apiId,
-      rootResourceId,
+      utils: { log, promisify },
+      lib: { formatIntegrationRequest },
+      rootResourceId: resourceId,
       gateway,
-      utils: { log, promisify, renderTemplates }
     } = data;
 
-    return renderTemplates(requests, data)
-      .then(rendered => assoc('requestTemplates', rendered, config))
-      .then(curry(integrationType)(data))
-      .then(config => {
-        const {
-          type,
-          credentials,
-          uri,
-          integrationHttpMethod = httpMethod,
-          requestTemplates,
-        } = config;
-
-        const args = {
-          httpMethod,
-          credentials,
-          resourceId: rootResourceId,
-          restApiId: apiId,
-          type,
-          uri,
-          requestParameters,
-          integrationHttpMethod,
-          requestTemplates,
-        };
-
-        return promisify(gateway.putIntegration, gateway)(args)
-          .then(log(`Created integration request for ${httpMethod} on ${rootResourceId}`));
-      }).then(_ => data);
+    // formatIntegrationRequest will reject if integration config is not present
+    // need to catch this a level above
+    return formatIntegrationRequest(method)(data)
+      .then(promisify(gateway.putIntegration, gateway))
+      .then(log(`Created integration request for ${httpMethod} on ${resourceId}`))
+      .then(_ => data);
   }
 }

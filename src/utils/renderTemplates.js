@@ -29,7 +29,7 @@ const contentResolver = cond([
 export default function renderTemplates(templates, data) {
   const {
     utils: { readFile },
-    awsConfig: { renderTemplate }
+    renderTemplate,
   } = data;
 
   const promises = values(mapObjIndexed((pathOrTemplate, mime) => {
