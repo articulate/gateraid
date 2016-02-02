@@ -3,17 +3,22 @@ import urlParser from 'url'
 
 const {
   pipeP,
-  map
-} = R;
+  map,
+  dissoc,
+  } = R;
 
 export default function createResourcePath(data) {
   const {
     definition: { baseUri },
     lib: { createResource },
-  } = data;
+    } = data;
 
   const { pathname } = urlParser.parse(baseUri);
   const parts = pathname.replace(/^\/|\/$/g, '').split('/');
 
-  return pipeP(...map(createResource, parts))(data);
+
+  return pipeP(...map(createResource, parts))(data)
+  // reset the resourceLens since all resources are
+  // relative to the baseUri path
+    .then(dissoc('resourcePath'));
 }
