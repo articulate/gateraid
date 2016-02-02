@@ -1,0 +1,20 @@
+{
+  "type": "http-proxy",
+  "url": "http://example.com/api/v1",
+  "http-method": "GET",
+  "params": {
+    "integration.request.header.Authorization": "method.request.querystring._heyo_session_id"
+  },
+  "requests": {
+    "form": "templates/session/request/get-form.mustache",
+    "json": "templates/session/request/get-json.mustache"
+  },
+  "responses": {
+    "default": {
+      "status-code": 200,
+      "templates": {
+        "json": "templates/session/response/get-json.mustache"
+      }
+    }
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "type": "lambda",
+  "lambda-name": "my-lambda",
+  "iam-role": "ExecLambdaRole",
+  "requests": null,
+  "responses": {
+    "Unauthorized: Invalid .*": {
+      "status-code": 400,
+      "templates": {
+        "json": {}
+      }
+    },
+    "default": {
+      "status-code": 200
+    }
+  }
+}
