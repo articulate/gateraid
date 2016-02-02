@@ -8,6 +8,7 @@ import fetchSchemas from './utils/fetchSchemas'
 
 import createResource from './aws/resource/createResource'
 import createMethod from './aws/method/createMethod'
+import formatIntegrationRequest from './aws/integration/formatIntegrationRequest'
 
 const utils = {
   log,
@@ -20,8 +21,9 @@ const utils = {
 const lib = {
   createResource,
   createMethod,
+  formatIntegrationRequest,
 }
 
-export default function loadSelf(data) {
+export default function loadSelf(data={}) {
   return merge({ utils, lib }, data);
 };
