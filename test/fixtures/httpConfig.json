@@ -6,8 +6,8 @@
     "integration.request.header.Authorization": "method.request.querystring._heyo_session_id"
   },
   "requests": {
-    "form": "templates/session/request/get-form.mustache",
-    "json": "templates/session/request/get-json.mustache"
+    "form": "test/fixtures/templates/demo.mustache",
+    "json": "test/fixtures/templates/demo.mustache"
   },
   "responses": {
     "default": {

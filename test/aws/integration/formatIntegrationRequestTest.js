@@ -10,13 +10,13 @@ const {
   merge,
   lensProp,
   compose,
-} = R;
+  } = R;
 
 describe("formatIntegrationRequest", () => {
   let promise;
   let config;
   let data = loadSelf({
-                        resourcePath: ['resourceConfig'],
+                        resourcePath: [ 'resourceConfig' ],
                         apiId: 'awk',
                         rootResourceId: 'ward',
                       });
@@ -48,7 +48,8 @@ describe("formatIntegrationRequest", () => {
                                                     type: 'AWS',
                                                     uri: 'arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/fnarn',
                                                     requestParameters: lambdaFixture.params,
-                                                    integrationHttpMethod: 'POST'
+                                                    integrationHttpMethod: 'POST',
+                                                    requestTemplates: {},
                                                   });
     });
 
@@ -76,6 +77,10 @@ describe("formatIntegrationRequest", () => {
                                                     requestParameters: httpFixture.params,
                                                     uri: httpFixture.url,
                                                     integrationHttpMethod: httpFixture[ 'http-method' ],
+                                                    requestTemplates: {
+                                                      "application/json": "{\n  \"client_id\": \"{{clientId}}\",\n  \"client_secret\": \"{{clientSecret}}\",\n  \"raw_string\": \"$input.path('$')\"\n}\n",
+                                                      "application/x-www-form-urlencoded": "{\n  \"client_id\": \"{{clientId}}\",\n  \"client_secret\": \"{{clientSecret}}\",\n  \"raw_string\": \"$input.path('$')\"\n}\n",
+                                                    },
                                                   });
     });
   });
