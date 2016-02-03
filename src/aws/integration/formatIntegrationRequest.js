@@ -20,20 +20,20 @@ export default function formatIntegrationRequest(method) {
       resourcePath,
     } = data;
 
-    const { type, requests, params } = path(resourcePath, data);
-    if (!type) { return Promise.reject(`No configuration for ${httpMethod} on ${resourceId}`); }
+    const config = path(resourcePath, data);
+    if (!config) { return Promise.reject(`No configuration for ${httpMethod} on ${resourceId}`); }
 
     const args = {
       resourceId,
       restApiId,
       httpMethod,
-      requestParameters: params,
+      requestParameters: config.params,
       integrationHttpMethod: httpMethod,
     };
 
-    const typeFormatter = requestTypeFormatter(type);
+    const typeFormatter = requestTypeFormatter(config.type);
 
-    return renderTemplates(requests, data)
+    return renderTemplates(config.requests, data)
       .then(curry(assoc)('requestTemplates', _, args))
       .then(typeFormatter(data))
   }
