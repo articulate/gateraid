@@ -9,6 +9,7 @@ import fetchSchemas from './utils/fetchSchemas'
 import createResource from './aws/resource/createResource'
 import createMethod from './aws/method/createMethod'
 import formatIntegrationRequest from './aws/integration/formatIntegrationRequest'
+import addMethodResponse from './aws/response/addMethodResponse'
 
 const utils = {
   log,
@@ -22,6 +23,7 @@ const lib = {
   createResource,
   createMethod,
   formatIntegrationRequest,
+  addMethodResponse,
 }
 
 export default function loadSelf(data={}) {
