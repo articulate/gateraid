@@ -17,7 +17,7 @@ function parse(yaml) {
   return readFile(env)
     .then(dotenv.parse)
     .then(context => curry(Mustache.render)(_, context, []))
-    .then(renderTemplate => ({ renderTemplate, resourceConfig }));
+    .then(templateRender => ({ templateRender, resourceConfig }));
 }
 
 export default function expandConfig(filepath) {

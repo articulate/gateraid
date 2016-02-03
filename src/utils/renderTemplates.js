@@ -29,7 +29,7 @@ const contentResolver = cond([
 export default function renderTemplates(templates, data) {
   const {
     utils: { readFile },
-    renderTemplate,
+    templateRender,
   } = data;
 
   const promises = values(mapObjIndexed((pathOrTemplate, mime) => {
@@ -39,7 +39,7 @@ export default function renderTemplates(templates, data) {
 
     return readFile(pathOrTemplate)
       .then(buf => buf.toString()) // reader returns a Buffer, renderer expects a String
-      .then(renderTemplate)
+      .then(templateRender)
       .then(rendered => assoc(mimeMap[mime], rendered, {}));
   }, templates));
 
