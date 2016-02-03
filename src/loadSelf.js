@@ -10,6 +10,7 @@ import createResource from './aws/resource/createResource'
 import createMethod from './aws/method/createMethod'
 import formatIntegrationRequest from './aws/integration/formatIntegrationRequest'
 import addMethodResponse from './aws/response/addMethodResponse'
+import requestTypeFormatter from './aws/integration/requestTypeFormatter'
 
 const utils = {
   log,
@@ -24,6 +25,7 @@ const lib = {
   createMethod,
   formatIntegrationRequest,
   addMethodResponse,
+  requestTypeFormatter,
 }
 
 export default function loadSelf(data={}) {

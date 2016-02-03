@@ -1,6 +1,7 @@
 import sinon from 'sinon'
 import loadSelf from '../../../src/loadSelf'
 import createMethod from '../../../src/aws/method/createMethod'
+
 import methodFixture from '../../fixtures/methodDefn.json'
 
 describe('createMethod', () => {
