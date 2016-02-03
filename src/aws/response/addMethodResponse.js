@@ -1,24 +1,25 @@
-import log from '../../utils/promiseChainLogger'
-import promisify from '../../utils/promisify'
-import fetchSchemas from '../../utils/fetchSchemas'
+import R from 'ramda'
 
-export default function addMethodResponse(httpMethod, statusCode, responseDefn) {
-  const {
-    body,
-    } = responseDefn;
+const {
+  path,
+  defaultTo,
+} = R;
+
+export default function addMethodResponse(method, statusCode) {
+  let { method: httpMethod } = method;
+  httpMethod = httpMethod.toUpperCase();
 
   return function (data) {
     const {
+      utils: { log, promisify, fetchSchemas },
       gateway,
       rootResourceId: resourceId,
       apiId: restApiId,
-      } = data;
+      resourcePath,
+    } = data;
 
-    let responseModels = {};
-
-    if (body) {
-      responseModels = fetchSchemas(body);
-    }
+    const { body } = path(resourcePath, data);
+    const responseModels = fetchSchemas(body);
 
     const args = {
       restApiId,
@@ -30,6 +31,7 @@ export default function addMethodResponse(httpMethod, statusCode, responseDefn) 
     };
 
     return promisify(gateway.putMethodResponse, gateway)(args)
-      .then(log(`Created method response for ${statusCode} to method ${httpMethod} on ${resourceId}`));
+      .then(log(`Created method response for ${statusCode} to method ${httpMethod} on ${resourceId}`))
+      .then(_ => data);
   }
 }

@@ -1,25 +1,26 @@
 import R from 'ramda'
-import addMethodResponse from './addMethodResponse'
 
 const {
-  mapObjIndexed,
+  pipeP,
+  keys,
+  map,
+  curry,
 } = R;
 
-export default function addMethodResponses(httpMethod, responses) {
-  return function(data) {
-    let promise = Promise.resolve(data);
+export default function addMethodResponses(method) {
+  const { responses } = method;
 
-    if(!responses) { return promise; }
+  return function(data) {
+    const { lib: { addMethodResponse } } = data;
+
+    if(!responses) { return Promise.resolve(data); }
+
+    const codes = keys(responses);
+    const curriedApi = curry(addMethodResponse)(method);
 
     // addMethodResponse calls must be sequential since AWS does not allow
     // concurrent modification of a method response:
     // BadRequestException: Unable to complete operation due to concurrent modification. Please try again later.
-    mapObjIndexed((responseDefn, statusCode) => {
-      promise = promise
-        .then(addMethodResponse(httpMethod, statusCode, responseDefn))
-        .then(_ => data);
-    }, responses);
-
-    return promise;
+    return pipeP(...map(curriedApi, codes))(data);
   }
 }
