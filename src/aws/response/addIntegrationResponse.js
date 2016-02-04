@@ -20,15 +20,16 @@ export default function addIntegrationResponse(method, selectionPattern) {
       resourcePath,
       } = data;
 
-    const { responses } = path(resourcePath, data);
-    if (!responses) { return Promise.resolve(data); }
+    const { responses:
+      { [selectionPattern]: response },
+      } = path(resourcePath, data);
+
+    if (!response) { return Promise.resolve(data); }
 
     const {
-      [selectionPattern]: {
-        'status-code': statusCode,
-        templates,
-      }
-    } = responses;
+      'status-code': statusCode,
+      templates,
+      } = response;
 
     const args = {
       restApiId,

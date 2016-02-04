@@ -53,7 +53,7 @@ describe("addIntegrationResponse", () => {
 
     context('with no config', () => {
       beforeEach(() => {
-        data = dissocPath(['resourceConfig', 'responses'], data);
+        data = dissocPath(['resourceConfig', 'responses', 0], data);
       });
 
       it('does nothing if no response config given', () => {

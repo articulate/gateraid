@@ -4,6 +4,7 @@ import loadSelf from '../../../src/loadSelf'
 import addIntegrationResponses from '../../../src/aws/response/addIntegrationResponses'
 
 import methodFixture from '../../fixtures/methodDefn.json'
+import lambdaConfig from '../../fixtures/lambdaConfig.json'
 
 const {
   keys,
@@ -12,7 +13,10 @@ const {
 
 describe('addIntegrationResponses', () => {
   let chain;
-  const data = loadSelf();
+  const data = loadSelf({
+                          resourceConfig: lambdaConfig,
+                          resourcePath: [ 'resourceConfig' ],
+                        });
 
   beforeEach(() => {
     data.spy = sinon.stub();
@@ -38,7 +42,7 @@ describe('addIntegrationResponses', () => {
   });
 
   context('sequentially', () => {
-    const patterns = keys(methodFixture.responses);
+    const patterns = keys(lambdaConfig.responses);
 
     patterns.forEach((pattern, index) => {
       it(`adds a response method for ${pattern} code`, () => {
