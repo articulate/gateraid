@@ -41,7 +41,6 @@ describe('addIntegration', () => {
     });
   });
 
-
   context('when SDK call errors', () => {
     beforeEach(() => {
       apiStub.yields('error', null);

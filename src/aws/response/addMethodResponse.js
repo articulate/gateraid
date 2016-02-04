@@ -2,7 +2,6 @@ import R from 'ramda'
 
 const {
   path,
-  defaultTo,
 } = R;
 
 export default function addMethodResponse(method, statusCode) {
