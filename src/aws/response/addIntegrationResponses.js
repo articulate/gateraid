@@ -1,20 +1,21 @@
 import R from 'ramda'
-import addIntegrationResponse from './addIntegrationResponse'
 
 const {
-  mapObjIndexed,
+  pipeP,
+  map,
+  keys,
+  curry,
 } = R;
 
-export default function addIntegrationResponses(httpMethod, responses) {
+export default function addIntegrationResponses(method) {
+  const { responses } = method;
+
   return function(data) {
-    let promise = Promise.resolve(data);
+    if(!responses) { return Promise.resolve(data); }
 
-    mapObjIndexed((defn, pattern) => {
-      promise = promise
-        .then(addIntegrationResponse(httpMethod, pattern, defn, data))
-        .then(_ => data);
-    }, responses);
+    const { lib: { addIntegrationResponse } } = data;
+    const curriedFn = curry(addIntegrationResponse)(method);
 
-    return promise;
+    return pipeP(...map(curriedFn, keys(responses)))(data);
   }
 }
