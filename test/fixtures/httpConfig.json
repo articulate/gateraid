@@ -13,7 +13,7 @@
     "default": {
       "status-code": 200,
       "templates": {
-        "json": "templates/session/response/get-json.mustache"
+        "json": "test/fixtures/templates/demo.mustache"
       }
     }
   }
