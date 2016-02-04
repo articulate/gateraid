@@ -1,33 +1,48 @@
-export default function addIntegrationResponse(httpMethod, selectionPattern, config) {
-  const {
-    'status-code': intStatusCode,
-    templates,
-    } = config;
+import R from 'ramda'
 
-  const statusCode = intStatusCode.toString();
+const {
+  path,
+  curry,
+  assoc,
+  __: _,
+  } = R;
 
-  return function(data) {
+export default function addIntegrationResponse(method, selectionPattern) {
+  let { method: httpMethod } = method;
+  httpMethod = httpMethod.toUpperCase();
+
+  return function (data) {
     const {
       gateway,
       rootResourceId: resourceId,
       apiId: restApiId,
-      utils: { promisify, log, renderTemplates }
-    } = data;
+      utils: { promisify, log, renderTemplates },
+      resourcePath,
+      } = data;
+
+    const { responses } = path(resourcePath, data);
+    if (!responses) { return Promise.resolve(data); }
+
+    const {
+      [selectionPattern]: {
+        'status-code': statusCode,
+        templates,
+      }
+    } = responses;
+
+    const args = {
+      restApiId,
+      resourceId,
+      httpMethod,
+      statusCode: statusCode.toString(),
+      selectionPattern,
+      responseParameters: {}
+    };
 
     return renderTemplates(templates, data)
-      .then(rendered => {
-        const args = {
-          restApiId,
-          resourceId,
-          httpMethod,
-          statusCode,
-          selectionPattern,
-          responseParameters: {},
-          responseTemplates: rendered,
-        };
-
-        return promisify(gateway.putIntegrationResponse, gateway)(args)
-          .then(log(`Created integration response for ${statusCode} to method ${httpMethod} on ${resourceId}`));
-      });
+      .then(curry(assoc)('responseTemplates', _, args))
+      .then(promisify(gateway.putIntegrationResponse, gateway))
+      .then(log(`Created integration response for ${statusCode} to method ${httpMethod} on ${resourceId}`))
+      .then(_ => data);
   }
 }
