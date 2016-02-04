@@ -87,12 +87,12 @@ describe("formatIntegrationRequest", () => {
 
   context('without config', () => {
     beforeEach(() => {
-      data = merge(data, { resourceLens: compose(data.resourceLens, lensProp('nope')) });
+      data = merge(data, { resourcePath: ['nope'] });
       promise = formatIntegrationRequest({ method: "put" })(data);
     });
 
     it('rejects to short integration chain', () => {
-      expect(promise).to.be.rejectedWith('No configuration for PUT on ward');
+      return expect(promise).to.be.rejectedWith('No configuration for PUT on ward');
     });
   });
 });
