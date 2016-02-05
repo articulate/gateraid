@@ -1,6 +1,6 @@
 # gateraid
 
-Gateraid is a small toolchain for publishing and managing [API Gateway][1] interfaces as defined by [RAML][2] API definitions. The goal is simple generation of API Gateways using static configuration for easy maintainance and reproducibility of AWS infrastructure and to simplify the configuration format for easier human readability and creation.
+Gateraid is a small toolchain for publishing and managing [API Gateway][1] interfaces as defined by [RAML][2] API definitions. The goal is simple generation of API Gateways using static configuration for easy maintenance and reproducibility of AWS infrastructure and to simplify the configuration format for easier human readability and creation.
 
 We use the RAML spec currently (v0.8) as it is defined by the [RAML spec](https://github.com/raml-org/raml-spec/blob/master/raml-0.8.md).
 
@@ -19,12 +19,14 @@ We use the RAML spec currently (v0.8) as it is defined by the [RAML spec](https:
     create [options] <filename>  Create new API Gateway from a RAML file definition.
     rm [options]                 Destroy an API
     config [action] [args...]    Manage config settings
+    open [options]               Open gateway in the AWS console
 
   Options:
 
-    -h, --help               output usage information
-    -V, --version            output the version number
-    -p, --profile [profile]  Select AWS credential profile to use [default].
+    -h, --help                output usage information
+    -V, --version             output the version number
+    -p, --profile [profile]   Select AWS credential profile to use.
+    -r, --region [us-east-1]  Select AWS region to use.
 ```
 
 ## Example
