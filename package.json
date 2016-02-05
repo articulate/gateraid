@@ -12,6 +12,7 @@
     "dotenv": "^1.2.0",
     "js-yaml": "^3.4.6",
     "mustache": "^2.2.1",
+    "open": "0.0.5",
     "ramda": "^0.19.0",
     "raml-parser": "^0.8.15",
     "uuid-js": "^0.7.5"

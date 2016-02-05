@@ -7,6 +7,7 @@ import prepareAws from './prepareAws'
 import configureUtils from './configureUtils'
 import parseRaml from './parseRaml'
 import generateConfigHandler from './generateConfigHandler'
+import openAWSConsole from './openAWSConsole'
 
 import createApi from './aws/api/createApi'
 import removeDefaultModels from './aws/model/removeDefaultModels'
@@ -80,6 +81,15 @@ program
     loadConfig(options)
       .then(generateConfigHandler(action, args))
       .catch(handleError);
+  });
+
+program
+  .command('open')
+  .description('Open gateway in the AWS console')
+  .option('--id [id]', "API ID")
+  .action(function(options) {
+    loadConfig(options)
+      .then(openAWSConsole);
   });
 
 program.parse(process.argv);
