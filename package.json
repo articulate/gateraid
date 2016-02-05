@@ -1,6 +1,6 @@
 {
   "name": "gateraid",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "RAML to API Gateway tool",
   "main": "./lib/cli.js",
   "repository": "articulate/gateraid",
