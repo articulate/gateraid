@@ -47,7 +47,7 @@ schemas:
 /session:
   get:
     description:
-      Retreives login session from _heyo_session_id
+      Retreives login session from session_id
     headers:
       Accept-Language:
         description: The user's language.
@@ -55,7 +55,7 @@ schemas:
         required: true
         example: 'en-US'
     queryParameters:
-      _heyo_session_id:
+      session_id:
         description: Login session id.
         type: string
         required: true
@@ -167,6 +167,7 @@ Which when rendered as part of the request/response template in the API Gateway,
 
 ## Dev Help
 
+Install deps: `npm install`
 Build code: `npm run build`
 Run: `./bin/gateraid -h`
 

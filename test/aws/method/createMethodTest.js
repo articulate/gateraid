@@ -31,7 +31,7 @@ describe('createMethod', () => {
         authorizationType: "NONE",
         requestParameters: {
           'method.request.header.Accept-Language': true,
-          'method.request.querystring._heyo_session_id': true,
+          'method.request.querystring.session_id': true,
         },
         requestModels: {},
       });

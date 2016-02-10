@@ -1,5 +1,5 @@
 {
-  "description": "Retreives login session from _heyo_session_id",
+  "description": "Retreives login session from session_id",
   "headers": {
     "Accept-Language": {
       "description": "The user's language.",
@@ -10,11 +10,11 @@
     }
   },
   "queryParameters": {
-    "_heyo_session_id": {
+    "session_id": {
       "description": "Login session id.",
       "type": "string",
       "required": true,
-      "displayName": "_heyo_session_id"
+      "displayName": "session_id"
     }
   },
   "responses": {

@@ -3,7 +3,7 @@
   "url": "http://example.com/api/v1",
   "http-method": "GET",
   "params": {
-    "integration.request.header.Authorization": "method.request.querystring._heyo_session_id"
+    "integration.request.header.Authorization": "method.request.querystring.session_id"
   },
   "requests": {
     "form": "test/fixtures/templates/demo.mustache",
