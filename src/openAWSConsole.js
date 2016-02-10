@@ -8,5 +8,6 @@ export default function openAWSConsole(data) {
 
   if(!apiId) { console.log('API ID not found or provided. Please use --id flag to specify.'); }
 
+  // will redirect to console root page if not found
   open(rootUri + `${apiId}/resources`);
 }

@@ -11,7 +11,7 @@ export default function addIntegrationResponse(method, selectionPattern) {
   let { method: httpMethod } = method;
   httpMethod = httpMethod.toUpperCase();
 
-  return function (data) {
+  return function(data) {
     const {
       gateway,
       rootResourceId: resourceId,
@@ -21,10 +21,10 @@ export default function addIntegrationResponse(method, selectionPattern) {
       } = data;
 
     const { responses:
-      { [selectionPattern]: response },
+      { [selectionPattern]: response }
       } = path(resourcePath, data);
 
-    if (!response) { return Promise.resolve(data); }
+    if(!response) { return Promise.resolve(data); }
 
     const {
       'status-code': statusCode,
